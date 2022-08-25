@@ -153,9 +153,19 @@ function showBaiduData(data) {
             }
         });
     } else {
-        $(".searchTips-ul").hide();
-        $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
-        $(".search-input-div").removeClass("search-input-div2");
+        $(".searchTips-ul li").remove();
+        if (searchArray) {
+            $(".searchTips-ul").show();
+            $(".search-input").css("border-bottom", "none")
+            $(".search-input-div").addClass("search-input-div2")
+            searchArray.forEach(element => {
+                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + element + `</p></li>`);
+            })
+        }else{
+            $(".searchTips-ul").hide();
+            $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
+            $(".search-input-div").removeClass("search-input-div2");
+        }
     }
 }
 
@@ -173,9 +183,19 @@ function showBingData(data) {
             });
         });
     } else {
-        $(".searchTips-ul").hide();
-        $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
-        $(".search-input-div").removeClass("search-input-div2");
+        $(".searchTips-ul li").remove();
+        if (searchArray) {
+            $(".searchTips-ul").show();
+            $(".search-input").css("border-bottom", "none")
+            $(".search-input-div").addClass("search-input-div2")
+            searchArray.forEach(element => {
+                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + element + `</p></li>`);
+            })
+        }else{
+            $(".searchTips-ul").hide();
+            $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
+            $(".search-input-div").removeClass("search-input-div2");
+        }
     }
 }
 
