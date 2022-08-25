@@ -8,7 +8,7 @@ $(function () {
     })
 
     $(".search-input").keypress(function (e) {
-        if (e.keyCode === "13") {
+        if (e.keyCode == "13") {
             $(".search-button").click();
         }
     })
@@ -126,7 +126,7 @@ function showSearchHistory(isAll) {
         if(searchHistoryArray){
             var searchArr = searchHistoryArray.filter(value => {
                 var textValue = $(".search-input").val().trim();
-                return value.indexOf(textValue) !== -1;
+                return value.indexOf(textValue) != -1;
             });
             var searchArray = [];
             for (let i = 0; i < searchArr.length; i++) {
@@ -146,7 +146,7 @@ function showBaiduData(data) {
     if (!searchArray) {
         searchArray = [];
     }
-    if (data.s.length !== 0) {
+    if (data.s.length != 0) {
         data.s.forEach(element => {
             if (!searchArray.includes(element)) {
                 $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p>` + element + `</p></li>`);
