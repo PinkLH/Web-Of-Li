@@ -1,19 +1,43 @@
+/**
+ * 百度搜索提示接口，回调函数showBaiduData()
+ * @type {string}
+ */
 const baiduTipsUrl = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?cb=showBaiduData&wd=";
+
+/**
+ * Bing搜索提示接口，回调函数showBingData()
+ * @type {string}
+ */
 const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb&cb=showBingData&q=";
+
+/**
+ * 这个是测试的Bing接口，我还没有玩明白它，先不用它
+ * @type {string}
+ */
 // const bingTipsUrl = "https://www.bing.com/AS/Suggestions?type=cb&cb=showBingData&cvid=f368abd3c3ed41ada21f700befdb9392&qry=";
+
 $(function () {
+    //进入页面就聚焦输入框
     $(".search-input").focus();
+
+    //输入框每输入一个值时就显示搜索提示
     $(".search-input").bind('input', function () {
+        //显示搜索提示
         showSearchContent();
     })
 
+    //输入框搞回车就搜索
     $(".search-input").keypress(function (e) {
-        if (e.keyCode == "13") {
+        //判断键盘是否点击了回车
+        if (e.keyCode === 13) {
+            //模拟点击搜索按钮
             $(".search-button").click();
         }
     })
 
+    //点击输入框就显示搜索提示
     $(".search-input").click(function () {
+        //显示搜索提示
         showSearchContent();
     })
 
@@ -34,9 +58,12 @@ $(function () {
         }
         var value = encodeURIComponent(textValue);
         if (!value) {
-            alert("请输入搜索信息！");
+            alterUtil.message("请输入搜索信息！","danger");//success, info, warning, danger
         } else {
             if (!searchHistoryArray.includes(textValue)) {
+                searchHistoryArray.unshift(textValue);
+            }else{
+                searchHistoryArray.splice(searchHistoryArray.indexOf(textValue), 1);
                 searchHistoryArray.unshift(textValue);
             }
             if (searchHistoryArray.length > 50) {
@@ -94,10 +121,20 @@ function delScript() {
 }
 
 function cleanHistory() {
-    if (confirm("真的要清空吗?")) {
-        localStorage.removeItem('searchHistorys');
-        alert("清空成功！");
-    }
+    swal({
+        title: "真的要清空吗?",
+        text: "清空了就再也看不见了哟!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            localStorage.removeItem('searchHistorys');
+            alterUtil.message("清空成功！","success");
+        } else {
+            swal("哈哈，你的记录得以幸存!");
+        }
+    });
 }
 
 function showSearchHistory(isAll) {
@@ -126,7 +163,7 @@ function showSearchHistory(isAll) {
         if(searchHistoryArray){
             var searchArr = searchHistoryArray.filter(value => {
                 var textValue = $(".search-input").val().trim();
-                return value.indexOf(textValue) != -1;
+                return value.indexOf(textValue) !== -1;
             });
             var searchArray = [];
             for (let i = 0; i < searchArr.length; i++) {
@@ -146,7 +183,7 @@ function showBaiduData(data) {
     if (!searchArray) {
         searchArray = [];
     }
-    if (data.s.length != 0) {
+    if (data.s.length !== 0) {
         data.s.forEach(element => {
             if (!searchArray.includes(element)) {
                 $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p>` + element + `</p></li>`);
@@ -154,7 +191,7 @@ function showBaiduData(data) {
         });
     } else {
         $(".searchTips-ul li").remove();
-        if (searchArray) {
+        if (searchArray.length !== 0) {
             $(".searchTips-ul").show();
             $(".search-input").css("border-bottom", "none")
             $(".search-input-div").addClass("search-input-div2")
@@ -184,7 +221,7 @@ function showBingData(data) {
         });
     } else {
         $(".searchTips-ul li").remove();
-        if (searchArray) {
+        if (searchArray.length !== 0) {
             $(".searchTips-ul").show();
             $(".search-input").css("border-bottom", "none")
             $(".search-input-div").addClass("search-input-div2")
