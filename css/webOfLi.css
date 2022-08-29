@@ -15,6 +15,11 @@ a:hover {
     text-decoration: none;
 }
 
+.alert-dismissable .close,
+.alert-dismissible .close{
+    top: 0;
+}
+
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,

@@ -163,7 +163,7 @@ function showSearchHistory(isAll) {
         if(searchHistoryArray){
             var searchArr = searchHistoryArray.filter(value => {
                 var textValue = $(".search-input").val().trim();
-                return value.indexOf(textValue) !== -1;
+                return value.substr(0, textValue.length) === textValue;
             });
             var searchArray = [];
             for (let i = 0; i < searchArr.length; i++) {
