@@ -234,10 +234,10 @@ function showBingData(data) {
             element.Suggests.forEach(e => {
                 if (!searchArray.includes(e.Txt)) {
                     var textValue = $(".search-input").val().trim();
-                    if (element.substr(0, textValue.length) === textValue) {
-                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                    if (e.Txt.substr(0, textValue.length) === textValue) {
+                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + e.Txt + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(e.Txt.substr(textValue.length)) + `</p></li>`);
                     }else {
-                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + e.Txt + `">` + e.Txt + `</p></li>`);
                     }
                 }
             });
@@ -250,10 +250,10 @@ function showBingData(data) {
             $(".search-input-div").addClass("search-input-div2")
             searchArray.forEach(element => {
                 var textValue = $(".search-input").val().trim();
-                if (element.substr(0, textValue.length) === textValue) {
-                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                if (element.Txt.substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element.Txt + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.Txt.substr(textValue.length)) + `</p></li>`);
                 }else {
-                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element.Txt + `">` + element.Txt + `</p></li>`);
                 }
             })
         } else {
