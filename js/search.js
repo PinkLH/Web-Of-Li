@@ -52,24 +52,24 @@ $(function () {
 
     $(".search-button").click(function () {
         var textValue = $(".search-input").val().trim();
-        var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorys'));
+        var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
         if (!searchHistoryArray) {
             searchHistoryArray = [];
         }
         var value = encodeURIComponent(textValue);
         if (!value) {
-            alterUtil.message("请输入搜索信息！","danger");//success, info, warning, danger
+            alterUtil.message("请输入搜索信息！", "danger");//success, info, warning, danger
         } else {
             if (!searchHistoryArray.includes(textValue)) {
                 searchHistoryArray.unshift(textValue);
-            }else{
+            } else {
                 searchHistoryArray.splice(searchHistoryArray.indexOf(textValue), 1);
                 searchHistoryArray.unshift(textValue);
             }
             if (searchHistoryArray.length > 50) {
                 searchHistoryArray.pop();
             }
-            localStorage.setItem('searchHistorys', JSON.stringify(searchHistoryArray))
+            localStorage.setItem('searchHistorysOfLi', JSON.stringify(searchHistoryArray))
             window.open($(this).attr("url") + value);
         }
     })
@@ -83,6 +83,7 @@ function showSearchContent() {
     var textValue = $(".search-input").val().trim();
     var value = encodeURIComponent(textValue);
     if (value) {
+        $(".searchTips-ul").css("padding", "10px 0");
         $(".searchTips-ul").show();
         $(".search-input").css("border-bottom", "none")
         $(".search-input-div").addClass("search-input-div2")
@@ -129,8 +130,8 @@ function cleanHistory() {
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            localStorage.removeItem('searchHistorys');
-            alterUtil.message("清空成功！","success");
+            localStorage.removeItem('searchHistorysOfLi');
+            alterUtil.message("清空成功！", "success");
         } else {
             swal("哈哈，你的记录得以幸存!");
         }
@@ -138,7 +139,7 @@ function cleanHistory() {
 }
 
 function showSearchHistory(isAll) {
-    var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorys'));
+    var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
     if (isAll) {
         $(".searchTips-ul li").remove();
         if (searchHistoryArray) {
@@ -149,9 +150,13 @@ function showSearchHistory(isAll) {
                 if (i >= 10) {
                     break;
                 }
-                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + searchHistoryArray[i] + `</p></li>`);
+                var textValue = $(".search-input").val().trim();
+                if (searchHistoryArray[i].substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + searchHistoryArray[i] + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(searchHistoryArray[i].substr(textValue.length)) + `</p></li>`);
+                }
             }
             $(".searchTips-ul").append(`<li class="cleanHistory-li"><p><a href="javascript:cleanHistory()" class="cleanHistory">清空历史</a></p></li>`);
+            $(".searchTips-ul").css("padding", "10px 0 0");
         } else {
             $(".searchTips-ul").hide();
             $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
@@ -160,7 +165,7 @@ function showSearchHistory(isAll) {
         }
     } else {
         $(".searchTips-ul li").remove();
-        if(searchHistoryArray){
+        if (searchHistoryArray) {
             var searchArr = searchHistoryArray.filter(value => {
                 var textValue = $(".search-input").val().trim();
                 return value.substr(0, textValue.length) === textValue;
@@ -170,7 +175,10 @@ function showSearchHistory(isAll) {
                 if (i >= 2) {
                     break;
                 }
-                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + searchArr[i] + `</p></li>`);
+                var textValue = $(".search-input").val().trim();
+                if (searchArr[i].substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + searchArr[i] + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(searchArr[i].substr(textValue.length)) + `</p></li>`);
+                }
                 searchArray[i] = searchArr[i];
             }
             return searchArray;
@@ -186,7 +194,12 @@ function showBaiduData(data) {
     if (data.s.length !== 0) {
         data.s.forEach(element => {
             if (!searchArray.includes(element)) {
-                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p>` + element + `</p></li>`);
+                var textValue = $(".search-input").val().trim();
+                if (element.substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                }else {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                }
             }
         });
     } else {
@@ -196,9 +209,14 @@ function showBaiduData(data) {
             $(".search-input").css("border-bottom", "none")
             $(".search-input-div").addClass("search-input-div2")
             searchArray.forEach(element => {
-                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + element + `</p></li>`);
+                var textValue = $(".search-input").val().trim();
+                if (element.substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                }else {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                }
             })
-        }else{
+        } else {
             $(".searchTips-ul").hide();
             $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
             $(".search-input-div").removeClass("search-input-div2");
@@ -215,7 +233,12 @@ function showBingData(data) {
         data.AS.Results.forEach(element => {
             element.Suggests.forEach(e => {
                 if (!searchArray.includes(e.Txt)) {
-                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p>` + e.Txt + `</p></li>`);
+                    var textValue = $(".search-input").val().trim();
+                    if (element.substr(0, textValue.length) === textValue) {
+                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                    }else {
+                        $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                    }
                 }
             });
         });
@@ -226,9 +249,14 @@ function showBingData(data) {
             $(".search-input").css("border-bottom", "none")
             $(".search-input-div").addClass("search-input-div2")
             searchArray.forEach(element => {
-                $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem">` + element + `</p></li>`);
+                var textValue = $(".search-input").val().trim();
+                if (element.substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                }else {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                }
             })
-        }else{
+        } else {
             $(".searchTips-ul").hide();
             $(".search-input").css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
             $(".search-input-div").removeClass("search-input-div2");
@@ -237,7 +265,8 @@ function showBingData(data) {
 }
 
 function searchItem(obj) {
-    $(".search-input").val($(obj).find("p").html());
+    console.log($(obj).find("p").attr("value"))
+    $(".search-input").val($(obj).find("p").attr("value"));
     $(".search-button").click();
 }
 

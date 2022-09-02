@@ -13,6 +13,9 @@ var alterUtil = {
         divElement.css({ // 消息框的定位样式
             "position": "absolute",
             "top": "0px",
+            "width": "200px",
+            "left": "50%",
+            "margin-left": "-100px",
             "z-index": 1000,
             "display": "none",
             "box-shadow": "0 3px 6px -4px #0000001f," +
@@ -20,8 +23,8 @@ var alterUtil = {
                 " 0 9px 28px 8px #0000000d",
             "border": "none",
             "text-align": "center",
-            "border-radius": "10px",
-            "font-weight": "bold"
+            "font-weight": "bold",
+            "height": "40px"
         });
         divElement.text(msg); // 设置消息框的内容
         // 消息框添加可以关闭按钮
@@ -29,8 +32,8 @@ var alterUtil = {
         $(divElement).append(closeBtn);
         // 消息框放入到页面中
         $('body').append(divElement);
-        var IntervalMS = 5; // 每次下浮的间隔毫秒
-        var floatSpace = 20; // 下浮的空间(px)
+        var IntervalMS = 15; // 每次下浮的间隔毫秒
+        var floatSpace = 15; // 下浮的空间(px)
         var nowTop = divElement.offset().top; // 获取元素当前的top值
         var stopTop = nowTop + floatSpace;    // 下浮停止时的top值
         divElement.fadeIn(IntervalMS * floatSpace) // 设置元素淡入
@@ -54,8 +57,8 @@ var alterUtil = {
         var divElement = this.alert(msg, type); // 生成Alert消息框
 
         setTimeout(function() {
-            var IntervalMS = 15; // 每次上浮的间隔毫秒
-            var floatSpace = 30; // 上浮的空间(px)
+            var IntervalMS = 20; // 每次上浮的间隔毫秒
+            var floatSpace = 15; // 上浮的空间(px)
             var nowTop = divElement.offset().top; // 获取元素当前的top值
             var stopTop = nowTop - floatSpace;    // 上浮停止时的top值
             divElement.fadeOut(IntervalMS * floatSpace); // 设置元素淡出
@@ -69,6 +72,6 @@ var alterUtil = {
                 }
             }, IntervalMS);
 
-        }, 2000);
+        }, 2500);
     }
 }
