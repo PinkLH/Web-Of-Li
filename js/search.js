@@ -197,7 +197,7 @@ function showBaiduData(data) {
                 var textValue = $(".search-input").val().trim();
                 if (element.substr(0, textValue.length) === textValue) {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
-                }else {
+                } else {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
                 }
             }
@@ -212,7 +212,7 @@ function showBaiduData(data) {
                 var textValue = $(".search-input").val().trim();
                 if (element.substr(0, textValue.length) === textValue) {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
-                }else {
+                } else {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
                 }
             })
@@ -236,7 +236,7 @@ function showBingData(data) {
                     var textValue = $(".search-input").val().trim();
                     if (e.Txt.substr(0, textValue.length) === textValue) {
                         $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + e.Txt + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(e.Txt.substr(textValue.length)) + `</p></li>`);
-                    }else {
+                    } else {
                         $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + e.Txt + `">` + e.Txt + `</p></li>`);
                     }
                 }
@@ -252,7 +252,7 @@ function showBingData(data) {
                 var textValue = $(".search-input").val().trim();
                 if (element.substr(0, textValue.length) === textValue) {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p class="historyItem" value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
-                }else {
+                } else {
                     $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
                 }
             })

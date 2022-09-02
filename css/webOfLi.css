@@ -40,7 +40,7 @@ a:hover {
 
 .m-item {
     height: 200px;
-    margin: 15px 0px;
+    margin: 15px 0;
     padding: 15px;
     border-radius: 20px;
     /* border: 1px solid #ddd; */
@@ -91,6 +91,15 @@ a:hover {
 
 .cleanHistory-li:hover {
     background-color: #ffffff !important;
+}
+
+.search-box {
+    box-shadow: 3px 3px 5px #a3dadb;
+    border-radius: 6px;
+}
+
+.search-engin-button {
+    border: none;
 }
 
 .searchTips-ul {
@@ -166,7 +175,7 @@ a:hover {
 }
 
 .m-item:hover .m_imgdiv {
-    box-shadow: 0px 0px 20px #bec3e0;
+    box-shadow: 0 0 20px #bec3e0;
 }
 
 .m_imgdiv {
@@ -176,7 +185,7 @@ a:hover {
     margin: 10px auto;
     border-radius: 15px;
     transition: .3s ease-in-out;
-    box-shadow: 0px 0px 20px #a3dadb;
+    box-shadow: 0 0 20px #a3dadb;
 }
 
 .m_imgdiv img {
