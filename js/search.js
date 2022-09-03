@@ -1,11 +1,11 @@
 /**
- * 百度搜索提示接口，回调函数showBaiduData()
+ * 百度搜索提示接口
  * @type {string}
  */
 const baiduTipsUrl = "https://www.baidu.com/sugrec?prod=pc";
 
 /**
- * Bing搜索提示接口，回调函数showBingData()
+ * Bing搜索提示接口
  * @type {string}
  */
 const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb";
@@ -111,24 +111,18 @@ function showSearchContent() {
             case "baidu":
                 $.ajax({
                     url: baiduTipsUrl,
-                    jsonp: 'cb',
                     data: {wd: value},
                     dataType: 'jsonp',
-                    success: function (data) {
-                        showBaiduData(data);
-                    }
+                    success: data => showBaiduData(data)
                 });
                 break;
 
             case "bing":
                 $.ajax({
                     url: bingTipsUrl,
-                    jsonp: 'cb',
                     data: {q: value},
                     dataType: 'jsonp',
-                    success: function (data) {
-                        showBingData(data);
-                    }
+                    success: data => showBingData(data)
                 });
                 break;
 
