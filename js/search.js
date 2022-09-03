@@ -2,13 +2,13 @@
  * 百度搜索提示接口，回调函数showBaiduData()
  * @type {string}
  */
-const baiduTipsUrl = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?cb=showBaiduData&wd=";
+const baiduTipsUrl = "https://www.baidu.com/sugrec?prod=pc";
 
 /**
  * Bing搜索提示接口，回调函数showBingData()
  * @type {string}
  */
-const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb&cb=showBingData&q=";
+const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb";
 
 /**
  * 这个是测试的Bing接口，我还没有玩明白它，先不用它
@@ -21,7 +21,7 @@ $(function () {
     $(".search-input").focus();
 
     //输入框每输入一个值时就显示搜索提示
-    $(".search-input").bind('input', function () {
+    $(".search-input").keyup(function () {
         //显示搜索提示
         showSearchContent();
     })
@@ -77,11 +77,7 @@ $(function () {
 })
 
 function showSearchContent() {
-    delScript();
-    let jsonP = document.createElement("script");
-    jsonP.id = "jsonP";
-    var textValue = $(".search-input").val().trim();
-    var value = encodeURIComponent(textValue);
+    var value = $(".search-input").val().trim();
     if (value) {
         $(".searchTips-ul").css("padding", "10px 0");
         $(".searchTips-ul").show();
@@ -90,13 +86,29 @@ function showSearchContent() {
         var name = $(".searchTips-ul").attr("name");
         switch (name) {
             case "baidu":
-                jsonP.src = baiduTipsUrl + value;
-                document.body.appendChild(jsonP);
+                $.ajax({
+                    url: baiduTipsUrl,
+                    jsonp: 'cb',
+                    data: {wd: value},
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        // console.log(data);
+                        showBaiduData(data);
+                    }
+                });
                 break;
 
             case "bing":
-                jsonP.src = bingTipsUrl + value;
-                document.body.appendChild(jsonP);
+                $.ajax({
+                    url: bingTipsUrl,
+                    jsonp: 'cb',
+                    data: {q: value},
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        // console.log(data);
+                        showBingData(data);
+                    }
+                });
                 break;
 
             case "github":
@@ -112,13 +124,6 @@ function showSearchContent() {
     } else {
         showSearchHistory(true);
     }
-}
-
-
-function delScript() {
-    let oScript = document.getElementById("jsonP");
-    if (!oScript) return;
-    document.body.removeChild(oScript);
 }
 
 function cleanHistory() {
@@ -191,14 +196,14 @@ function showBaiduData(data) {
     if (!searchArray) {
         searchArray = [];
     }
-    if (data.s.length !== 0) {
-        data.s.forEach(element => {
-            if (!searchArray.includes(element)) {
+    if (data.g.length !== 0) {
+        data.g.forEach(element => {
+            if (!searchArray.includes(element.q)) {
                 var textValue = $(".search-input").val().trim();
-                if (element.substr(0, textValue.length) === textValue) {
-                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.substr(textValue.length)) + `</p></li>`);
+                if (element.q.substr(0, textValue.length) === textValue) {
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element.q + `"><span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` + htmlUtil.htmlEncode(element.q.substr(textValue.length)) + `</p></li>`);
                 } else {
-                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element + `">` + element + `</p></li>`);
+                    $(".searchTips-ul").append(`<li onclick="searchItem(this)"><p value="` + element.q + `">` + element.q + `</p></li>`);
                 }
             }
         });
