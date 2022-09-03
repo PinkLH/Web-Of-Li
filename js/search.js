@@ -11,6 +11,24 @@ const baiduTipsUrl = "https://www.baidu.com/sugrec?prod=pc";
 const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb";
 
 /**
+ * 保存的搜索历史的数量，超过这个数量的将被自动删除
+ * @type {number}
+ */
+const SAVED_SEARCH_HISTORY_NUMBER = 50;
+
+/**
+ * 显示的搜索历史的数量
+ * @type {number}
+ */
+const SHOW_SEARCH_HISTORY_NUMBER = 10;
+
+/**
+ * 搜索中显示搜索历史的数量
+ * @type {number}
+ */
+const SHOW_SEARCHING_HISTORY_NUMBER = 2;
+
+/**
  * 这个是测试的Bing接口，我还没有玩明白它，先不用它
  * @type {string}
  */
@@ -48,11 +66,11 @@ $(function () {
     });
 
 
-    $searchButton.click(search);
+    $searchButton.click(searchAndSaveHistory);
 
 })
 
-function search() {
+function searchAndSaveHistory() {
     var $searchInput = $(".search-input");
     var textValue = $searchInput.val().trim().toLowerCase();
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
@@ -69,7 +87,7 @@ function search() {
             searchHistoryArray.splice(searchHistoryArray.indexOf(textValue), 1);
             searchHistoryArray.unshift(textValue);
         }
-        if (searchHistoryArray.length > 50) {
+        if (searchHistoryArray.length > SAVED_SEARCH_HISTORY_NUMBER) {
             searchHistoryArray.pop();
         }
         localStorage.setItem('searchHistorysOfLi', JSON.stringify(searchHistoryArray))
@@ -157,7 +175,7 @@ function showSearchHistory(isAll) {
             $searchInput.css("border-bottom", "none")
             $searchInputDiv.addClass("search-input-div2")
             for (let i = 0; i < searchHistoryArray.length; i++) {
-                if (i >= 10) {
+                if (i >= SHOW_SEARCH_HISTORY_NUMBER) {
                     break;
                 }
                 if (searchHistoryArray[i].substr(0, textValue.length) === textValue) {
@@ -189,7 +207,7 @@ function showSearchHistory(isAll) {
             });
             var searchArray = [];
             for (let i = 0; i < searchArr.length; i++) {
-                if (i >= 2) {
+                if (i >= SHOW_SEARCHING_HISTORY_NUMBER) {
                     break;
                 }
                 if (searchArr[i].substr(0, textValue.length) === textValue) {
