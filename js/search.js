@@ -39,11 +39,20 @@ $(function () {
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
     var $searchButton = $(".search-button");
+    var $searchInputRemoveIco = $(".search-input-remove-ico");
     //进入页面就聚焦输入框
     $searchInput.focus();
 
     //输入框每输入一个值时就显示搜索提示
     $searchInput.keyup(showSearchContent);
+
+    $searchInput.bind('input', function () {
+        if ($(this).val()) {
+            $searchInputRemoveIco.show();
+        } else {
+            $searchInputRemoveIco.hide();
+        }
+    });
 
     //输入框搞回车就搜索
     $searchInput.keypress(e => {
@@ -57,14 +66,20 @@ $(function () {
     //点击输入框就显示搜索提示
     $searchInput.click(showSearchContent)
 
-    $searchInput.blur(function () {
-        setTimeout(function () {
+    $(document).click(e => {
+        if(!$searchInput[0].contains(e.target) && $searchInputRemoveIco[0] !== e.target){
             $searchTipsUl.hide();
             $searchInput.css("border-bottom", "1px solid #ccc");
             $searchInputDiv.removeClass("search-input-div2");
-        }, 300);
+        }
     });
 
+    $searchInputRemoveIco.click(function () {
+        $searchInput.val("");
+        $searchInput.focus();
+        $searchInputRemoveIco.hide();
+        showSearchContent();
+    });
 
     $searchButton.click(searchAndSaveHistory);
 
@@ -100,7 +115,13 @@ function showSearchContent() {
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
     var $searchTipsUlLi = $(".searchTips-ul li");
+    var $searchInputRemoveIco = $(".search-input-remove-ico");
     var value = $searchInput.val().trim().toLowerCase();
+    if ($searchInput.val()) {
+        $searchInputRemoveIco.show();
+    } else {
+        $searchInputRemoveIco.hide();
+    }
     if (value) {
         $searchTipsUl.css("padding", "10px 0");
         $searchTipsUl.show();
@@ -111,6 +132,7 @@ function showSearchContent() {
             case "baidu":
                 $.ajax({
                     url: baiduTipsUrl,
+                    jsonp: 'cb',
                     data: {wd: value},
                     dataType: 'jsonp',
                     success: data => showBaiduData(data)
@@ -120,6 +142,7 @@ function showSearchContent() {
             case "bing":
                 $.ajax({
                     url: bingTipsUrl,
+                    jsonp: 'cb',
                     data: {q: value},
                     dataType: 'jsonp',
                     success: data => showBingData(data)
@@ -316,7 +339,9 @@ function onlyShowSearchHistory(searchArray) {
 function searchItem(obj) {
     var $searchInput = $(".search-input");
     var $searchButton = $(".search-button");
+    var $searchInputRemoveIco = $(".search-input-remove-ico");
     $searchInput.val($(obj).find("p").attr("value"));
+    $searchInputRemoveIco.show();
     $searchButton.click();
 }
 

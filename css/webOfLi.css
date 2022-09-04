@@ -155,6 +155,9 @@ a:hover {
     transition: .3s ease-in-out;
     background-color: #caf8ff;
 }
+.search-input{
+    border-radius: 0 !important;
+}
 
 .search-input-div {
     width: 100%;
@@ -170,6 +173,23 @@ a:hover {
     background-color: #f5f5f6;
     z-index: 1002;
     display: none;
+}
+
+.search-input-remove-ico{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    margin-top: -9px;
+    z-index: 1000;
+    color: #bbb;
+    font-size: 18px;
+    transition: .3s ease-in-out;
+    cursor: pointer;
+    display: none;
+}
+
+.search-input-remove-ico:hover{
+    color: #888;
 }
 
 .search-input-div2::before {
