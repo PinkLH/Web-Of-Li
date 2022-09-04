@@ -1,4 +1,9 @@
 /**
+ * 我就是我，不一样的烟火！
+ * @author 黎宏
+ */
+
+/**
  * 百度搜索提示接口
  * @type {string}
  */
@@ -35,17 +40,20 @@ const SHOW_SEARCHING_HISTORY_NUMBER = 2;
 // const bingTipsUrl = "https://www.bing.com/AS/Suggestions?type=cb&cb=showBingData&cvid=f368abd3c3ed41ada21f700befdb9392&qry=";
 
 $(function () {
+    //一些选择器
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
     var $searchButton = $(".search-button");
     var $searchInputRemoveIco = $(".search-input-remove-ico");
+
     //进入页面就聚焦输入框
     $searchInput.focus();
 
     //输入框每输入一个值时就显示搜索提示
     $searchInput.keyup(showSearchContent);
 
+    //输入框每输入一个值时就判断清除按钮是否隐藏
     $searchInput.bind('input', function () {
         if ($(this).val()) {
             $searchInputRemoveIco.show();
@@ -54,11 +62,17 @@ $(function () {
         }
     });
 
+    //点击清除按钮就清除输入框的值并显示搜索历史（没有就不显示）
+    $searchInputRemoveIco.click(function () {
+        $searchInput.val("");
+        $searchInput.focus();
+        $searchInputRemoveIco.hide();
+        showSearchHistory(false);
+    });
+
     //输入框搞回车就搜索
     $searchInput.keypress(e => {
-        //判断键盘是否点击了回车
         if (e.keyCode === 13) {
-            //模拟点击搜索按钮
             $searchButton.click();
         }
     });
@@ -66,25 +80,24 @@ $(function () {
     //点击输入框就显示搜索提示
     $searchInput.click(showSearchContent)
 
+    //监听页面的点击事件，当点击的不是输入框和清除按钮时就隐藏搜索提示框
     $(document).click(e => {
-        if(!$searchInput[0].contains(e.target) && $searchInputRemoveIco[0] !== e.target){
+        //e.target返回的是当前点击的DOM对象，$searchInput[0]是将JQuery对象转为DOM对象
+        if($searchInput[0] !== e.target && $searchInputRemoveIco[0] !== e.target){
             $searchTipsUl.hide();
             $searchInput.css("border-bottom", "1px solid #ccc");
             $searchInputDiv.removeClass("search-input-div2");
         }
     });
 
-    $searchInputRemoveIco.click(function () {
-        $searchInput.val("");
-        $searchInput.focus();
-        $searchInputRemoveIco.hide();
-        showSearchContent();
-    });
-
+    //点击搜索按钮就搜索并保存搜索历史
     $searchButton.click(searchAndSaveHistory);
 
 })
 
+/**
+ * 搜索并保存搜索历史
+ */
 function searchAndSaveHistory() {
     var $searchInput = $(".search-input");
     var textValue = $searchInput.val().trim().toLowerCase();
@@ -110,6 +123,9 @@ function searchAndSaveHistory() {
     }
 }
 
+/**
+ * 显示搜索提示框
+ */
 function showSearchContent() {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
@@ -157,10 +173,13 @@ function showSearchContent() {
                 break;
         }
     } else {
-        showSearchHistory(true);
+        showSearchHistory(false);
     }
 }
 
+/**
+ * 清空搜索历史
+ */
 function cleanHistory() {
     swal({
         title: "真的要清空吗?",
@@ -178,14 +197,19 @@ function cleanHistory() {
     });
 }
 
-function showSearchHistory(isAll) {
+/**
+ * 显示搜索历史
+ * @param isSearching 是否正在搜索中
+ * @returns {*[]} 搜索中匹配到的最近的几条搜索历史
+ */
+function showSearchHistory(isSearching) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
     var $searchTipsUlLi = $(".searchTips-ul li");
     var textValue = $searchInput.val().trim().toLowerCase();
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
-    if (isAll) {
+    if (!isSearching) {
         $searchTipsUlLi.remove();
         if (searchHistoryArray) {
             $searchTipsUl.show();
@@ -242,10 +266,14 @@ function showSearchHistory(isAll) {
     }
 }
 
+/**
+ * 显示百度接口返回的搜索提示
+ * @param data 返回的搜索提示数据
+ */
 function showBaiduData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
-    var searchArray = showSearchHistory(false);
+    var searchArray = showSearchHistory(true);
     if (!searchArray) {
         searchArray = [];
     }
@@ -272,10 +300,14 @@ function showBaiduData(data) {
     }
 }
 
+/**
+ * 显示Bing接口返回的搜索提示
+ * @param data 返回的搜索提示数据
+ */
 function showBingData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
-    var searchArray = showSearchHistory(false);
+    var searchArray = showSearchHistory(true);
     if (!searchArray) {
         searchArray = [];
     }
@@ -304,6 +336,10 @@ function showBingData(data) {
     }
 }
 
+/**
+ * 只显示搜索历史
+ * @param searchArray 搜索中的匹配到的最近几条历史
+ */
 function onlyShowSearchHistory(searchArray) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
@@ -336,6 +372,10 @@ function onlyShowSearchHistory(searchArray) {
     }
 }
 
+/**
+ * 搜索对应搜索提示的内容
+ * @param obj 点击的当前的DOM对象
+ */
 function searchItem(obj) {
     var $searchInput = $(".search-input");
     var $searchButton = $(".search-button");
@@ -345,6 +385,10 @@ function searchItem(obj) {
     $searchButton.click();
 }
 
+/**
+ * 更换搜索引擎时，搜索参数更换为对应引擎的
+ * @param obj 更换引擎的DOM对象
+ */
 function changeSearchEngin(obj) {
     var $searchTipsUl = $(".searchTips-ul");
     var $searchEnginText = $("#search-engin-text");
