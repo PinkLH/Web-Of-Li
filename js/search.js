@@ -130,7 +130,6 @@ function showSearchContent() {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
-    var $searchTipsUlLi = $(".searchTips-ul li");
     var $searchInputRemoveIco = $(".search-input-remove-ico");
     var value = $searchInput.val().trim().toLowerCase();
     if ($searchInput.val()) {
@@ -346,7 +345,7 @@ function onlyShowSearchHistory(searchArray) {
     var $searchInputDiv = $(".search-input-div");
     var $searchTipsUlLi = $(".searchTips-ul li");
     $searchTipsUlLi.remove();
-    if (searchArray.length !== 0) {
+    if (searchArray && searchArray.length !== 0) {
         $searchTipsUl.show();
         $searchInput.css("border-bottom", "none")
         $searchInputDiv.addClass("search-input-div2")
