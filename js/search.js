@@ -166,10 +166,7 @@ function showSearchContent() {
                 break;
 
             case "github":
-                $searchTipsUl.hide();
-                $searchInput.css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
-                $searchInputDiv.removeClass("search-input-div2");
-                $searchTipsUlLi.remove();
+                onlyShowSearchHistory(showSearchHistory(true, true));
                 break;
         }
     } else {
@@ -200,9 +197,10 @@ function cleanHistory() {
 /**
  * 显示搜索历史
  * @param isSearching 是否正在搜索中
+ * @param isUndefined 接口返回的数据是否为空
  * @returns {*[]} 搜索中匹配到的最近的几条搜索历史
  */
-function showSearchHistory(isSearching) {
+function showSearchHistory(isSearching, isUndefined) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
     var $searchInputDiv = $(".search-input-div");
@@ -248,18 +246,19 @@ function showSearchHistory(isSearching) {
             });
             var searchArray = [];
             for (let i = 0; i < searchArr.length; i++) {
-                if (i >= SHOW_SEARCHING_HISTORY_NUMBER) {
+                if (i >= SHOW_SEARCHING_HISTORY_NUMBER && !isUndefined) {
                     break;
-                }
-                if (searchArr[i].substr(0, textValue.length) === textValue) {
-                    $searchTipsUl.append(`<li onclick="searchItem(this)">
+                }else if (i < SHOW_SEARCH_HISTORY_NUMBER){
+                    if (searchArr[i].substr(0, textValue.length) === textValue) {
+                        $searchTipsUl.append(`<li onclick="searchItem(this)">
                                             <p class="historyItem" value="` + searchArr[i] + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
-                        htmlUtil.htmlEncode(searchArr[i].substr(textValue.length)) + `
+                            htmlUtil.htmlEncode(searchArr[i].substr(textValue.length)) + `
                                             </p>
                                           </li>`);
+                    }
+                    searchArray[i] = searchArr[i];
                 }
-                searchArray[i] = searchArr[i];
             }
             return searchArray;
         }
@@ -273,7 +272,8 @@ function showSearchHistory(isSearching) {
 function showBaiduData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
-    var searchArray = showSearchHistory(true);
+    var searchArray = showSearchHistory(true, data.g === undefined);
+
     if (!searchArray) {
         searchArray = [];
     }
@@ -307,7 +307,7 @@ function showBaiduData(data) {
 function showBingData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
-    var searchArray = showSearchHistory(true);
+    var searchArray = showSearchHistory(true, data.AS.Results === undefined);
     if (!searchArray) {
         searchArray = [];
     }
