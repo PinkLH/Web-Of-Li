@@ -51,16 +51,7 @@ $(function () {
     $searchInput.focus();
 
     //输入框每输入一个值时就显示搜索提示
-    $searchInput.keyup(showSearchContent);
-
-    //输入框每输入一个值时就判断清除按钮是否隐藏
-    $searchInput.bind('input', function () {
-        if ($(this).val()) {
-            $searchInputRemoveIco.show();
-        } else {
-            $searchInputRemoveIco.hide();
-        }
-    });
+    $searchInput.bind('input', showSearchContent);
 
     //点击清除按钮就清除输入框的值并显示搜索历史（没有就不显示）
     $searchInputRemoveIco.click(function () {
@@ -73,6 +64,7 @@ $(function () {
     //输入框搞回车就搜索
     $searchInput.keypress(e => {
         if (e.keyCode === 13) {
+            $searchInput.blur();
             $searchButton.click();
         }
     });
@@ -119,7 +111,7 @@ function searchAndSaveHistory() {
             searchHistoryArray.pop();
         }
         localStorage.setItem('searchHistorysOfLi', JSON.stringify(searchHistoryArray))
-        window.open($(this).attr("url") + value);
+        window.open($(this).attr("url") + encodeURIComponent($searchInput.val().trim()));
     }
 }
 
@@ -129,7 +121,6 @@ function searchAndSaveHistory() {
 function showSearchContent() {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
-    var $searchInputDiv = $(".search-input-div");
     var $searchInputRemoveIco = $(".search-input-remove-ico");
     var value = $searchInput.val().trim().toLowerCase();
     if ($searchInput.val()) {
@@ -138,10 +129,6 @@ function showSearchContent() {
         $searchInputRemoveIco.hide();
     }
     if (value) {
-        $searchTipsUl.css("padding", "10px 0");
-        $searchTipsUl.show();
-        $searchInput.css("border-bottom", "none")
-        $searchInputDiv.addClass("search-input-div2")
         var name = $searchTipsUl.attr("name");
         switch (name) {
             case "baidu":
@@ -271,12 +258,13 @@ function showSearchHistory(isSearching, isUndefined) {
 function showBaiduData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
+    var $searchInputDiv = $(".search-input-div");
     var searchArray = showSearchHistory(true, data.g === undefined);
 
     if (!searchArray) {
         searchArray = [];
     }
-    if (data.g) {
+    if (data.g && $searchInput.val().trim()) {
         data.g.forEach(element => {
             if (!searchArray.includes(element.q)) {
                 var textValue = $searchInput.val().trim().toLowerCase();
@@ -294,6 +282,10 @@ function showBaiduData(data) {
                 }
             }
         });
+        $searchTipsUl.css("padding", "10px 0");
+        $searchInput.css("border-bottom", "none");
+        $searchInputDiv.addClass("search-input-div2");
+        $searchTipsUl.show();
     } else {
         onlyShowSearchHistory(searchArray);
     }
@@ -306,11 +298,12 @@ function showBaiduData(data) {
 function showBingData(data) {
     var $searchInput = $(".search-input");
     var $searchTipsUl = $(".searchTips-ul");
+    var $searchInputDiv = $(".search-input-div");
     var searchArray = showSearchHistory(true, data.AS.Results === undefined);
     if (!searchArray) {
         searchArray = [];
     }
-    if (data.AS.Results) {
+    if (data.AS.Results && $searchInput.val().trim()) {
         data.AS.Results.forEach(element => {
             element.Suggests.forEach(e => {
                 if (!searchArray.includes(e.Txt)) {
@@ -330,6 +323,10 @@ function showBingData(data) {
                 }
             });
         });
+        $searchTipsUl.css("padding", "10px 0");
+        $searchInput.css("border-bottom", "none");
+        $searchInputDiv.addClass("search-input-div2");
+        $searchTipsUl.show();
     } else {
         onlyShowSearchHistory(searchArray);
     }
@@ -346,28 +343,32 @@ function onlyShowSearchHistory(searchArray) {
     var $searchTipsUlLi = $(".searchTips-ul li");
     $searchTipsUlLi.remove();
     if (searchArray && searchArray.length !== 0) {
-        $searchTipsUl.show();
-        $searchInput.css("border-bottom", "none")
-        $searchInputDiv.addClass("search-input-div2")
-        searchArray.forEach(element => {
-            var textValue = $searchInput.val().trim().toLowerCase();
-            if (element.substr(0, textValue.length) === textValue) {
-                $searchTipsUl.append(`<li onclick="searchItem(this)">
+        if ($searchInput.val().trim()){
+            $searchTipsUl.show();
+            $searchInput.css("border-bottom", "none")
+            $searchInputDiv.addClass("search-input-div2")
+            searchArray.forEach(element => {
+                var textValue = $searchInput.val().trim().toLowerCase();
+                if (element.substr(0, textValue.length) === textValue) {
+                    $searchTipsUl.append(`<li onclick="searchItem(this)">
                                         <p class="historyItem" value="` + element + `">
                                             <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
-                    htmlUtil.htmlEncode(element.substr(textValue.length)) + `
+                        htmlUtil.htmlEncode(element.substr(textValue.length)) + `
                                         </p>
                                       </li>`);
-            } else {
-                $searchTipsUl.append(`<li onclick="searchItem(this)">
+                } else {
+                    $searchTipsUl.append(`<li onclick="searchItem(this)">
                                         <p value="` + element + `">` + element + `</p>
                                       </li>`);
-            }
-        })
+                }
+            })
+        }else {
+            showSearchHistory(false);
+        }
     } else {
-        $searchTipsUl.hide();
         $searchInput.css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
         $searchInputDiv.removeClass("search-input-div2");
+        $searchTipsUl.hide();
     }
 }
 
