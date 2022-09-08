@@ -266,18 +266,19 @@ function showBaiduData(data) {
     }
     if (data.g && $searchInput.val().trim()) {
         data.g.forEach(element => {
-            if (!searchArray.includes(element.q)) {
+            var item = element.q;
+            if (!searchArray.includes(item)) {
                 var textValue = $searchInput.val().trim().toLowerCase();
-                if (element.q.substr(0, textValue.length) === textValue) {
+                if (item.substr(0, textValue.length) === textValue) {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p value="` + element.q + `">
+                                            <p value="` + item + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
-                        htmlUtil.htmlEncode(element.q.substr(textValue.length)) + `
+                        htmlUtil.htmlEncode(item.substr(textValue.length)) + `
                                             </p>
                                           </li>`);
                 } else {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p value="` + element.q + `">` + element.q + `</p>
+                                            <p value="` + htmlUtil.htmlEncode(item) + `">` + htmlUtil.htmlEncode(item) + `</p>
                                           </li>`);
                 }
             }
@@ -306,19 +307,20 @@ function showBingData(data) {
     if (data.AS.Results && $searchInput.val().trim()) {
         data.AS.Results.forEach(element => {
             element.Suggests.forEach(e => {
-                if (!searchArray.includes(e.Txt)) {
+                var item = e.Txt;
+                if (!searchArray.includes(item)) {
                     var textValue = $searchInput.val().trim().toLowerCase();
-                    if (e.Txt.substr(0, textValue.length) === textValue) {
+                    if (item.substr(0, textValue.length) === textValue) {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                                <p value="` + e.Txt + `">
-                                                    <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
-                            htmlUtil.htmlEncode(e.Txt.substr(textValue.length)) + `
-                                                </p>
-                                              </li>`);
+                                            <p value="` + item + `">
+                                                <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
+                            htmlUtil.htmlEncode(item.substr(textValue.length)) + `
+                                            </p>
+                                          </li>`);
                     } else {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                                <p value="` + e.Txt + `">` + e.Txt + `</p>
-                                              </li>`);
+                                            <p value="` + htmlUtil.htmlEncode(item) + `">` + htmlUtil.htmlEncode(item) + `</p>
+                                          </li>`);
                     }
                 }
             });
@@ -358,7 +360,7 @@ function onlyShowSearchHistory(searchArray) {
                                       </li>`);
                 } else {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                        <p value="` + element + `">` + element + `</p>
+                                        <p value="` + htmlUtil.htmlEncode(element) + `">` + htmlUtil.htmlEncode(element) + `</p>
                                       </li>`);
                 }
             })
