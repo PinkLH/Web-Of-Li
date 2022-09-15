@@ -36,6 +36,7 @@ a:hover {
 .search-engin-button:focus {
     background-color: #94cdff !important;
 }
+
 .search-engin-button:hover {
     background-color: #bbddff;
 }
@@ -127,7 +128,6 @@ a:hover {
 
 .searchTips-ul li {
     cursor: pointer;
-    padding: 8px 16px;
 }
 
 .searchTips-ul li p {
@@ -136,6 +136,7 @@ a:hover {
     white-space: nowrap;
     font-weight: bold;
     margin: 0;
+    padding: 8px 16px;
 }
 
 .searchTips-ul li:hover {
@@ -144,6 +145,20 @@ a:hover {
 
 .searchTips-span {
     font-weight: normal;
+}
+
+.searchTips-removeSpan {
+    font-size: 18px;
+    float: right;
+    color: #ccc;
+    margin-right: 2px;
+    transition: .3s ease-in-out;
+}
+
+.searchTips-removeSpan:hover {
+    transform-origin: 49% 47%;
+    transform: rotate(90deg);
+    color: #888;
 }
 
 .search-engin-text {
@@ -155,7 +170,8 @@ a:hover {
     transition: .3s ease-in-out;
     background-color: #caf8ff;
 }
-.search-input{
+
+.search-input {
     border-radius: 0 !important;
 }
 
@@ -175,7 +191,7 @@ a:hover {
     display: none;
 }
 
-.search-input-remove-ico{
+.search-input-remove-ico {
     position: absolute;
     right: 20px;
     top: 50%;
@@ -189,8 +205,8 @@ a:hover {
     display: none;
 }
 
-.search-input-remove-ico:hover{
-    transform:rotate(90deg) scale(1.4);
+.search-input-remove-ico:hover {
+    transform: rotate(90deg) scale(1.4);
     color: #888;
 }
 

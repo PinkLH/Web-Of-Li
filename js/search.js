@@ -75,7 +75,7 @@ $(function () {
     //监听页面的点击事件，当点击的不是输入框和清除按钮时就隐藏搜索提示框
     $(document).click(e => {
         //e.target返回的是当前点击的DOM对象，$searchInput[0]是将JQuery对象转为DOM对象
-        if($searchInput[0] !== e.target && $searchInputRemoveIco[0] !== e.target){
+        if ($searchInput[0] !== e.target && $searchInputRemoveIco[0] !== e.target) {
             $searchTipsUl.hide();
             $searchInput.css("border-bottom", "1px solid #ccc");
             $searchInputDiv.removeClass("search-input-div2");
@@ -181,6 +181,33 @@ function cleanHistory() {
 }
 
 /**
+ * 删除某个搜索历史
+ * @param event 浏览器事件对象
+ * @param obj 删除按钮所在的对象
+ */
+function removeHistoryItem(event, obj) {
+    var $searchInput = $(".search-input");
+    var $searchTipsUl = $(".searchTips-ul");
+    var $searchInputDiv = $(".search-input-div");
+    var $searchTipsUlLi = $(".searchTips-ul li");
+    var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
+    var value = $(obj).parent().attr("value");
+    if (searchHistoryArray && searchHistoryArray.includes(value)) {
+        $(obj).parent().parent().remove();
+        searchHistoryArray.splice(searchHistoryArray.indexOf(value), 1);
+    }
+    if ($searchTipsUl.find(".cleanHistory-li").siblings().length === 0 && $searchTipsUl.find(".cleanHistory-li")[0]) {
+        $searchTipsUl.hide();
+        $searchInput.css("border-bottom", "1px solid rgba(82, 168, 236, .8)");
+        $searchInputDiv.removeClass("search-input-div2");
+        $searchTipsUlLi.remove();
+        $searchInput.focus();
+    }
+    localStorage.setItem('searchHistorysOfLi', JSON.stringify(searchHistoryArray))
+    event.stopPropagation();
+}
+
+/**
  * 显示搜索历史
  * @param isSearching 是否正在搜索中
  * @param isUndefined 接口返回的数据是否为空
@@ -195,7 +222,7 @@ function showSearchHistory(isSearching, isUndefined) {
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
     if (!isSearching) {
         $searchTipsUlLi.remove();
-        if (searchHistoryArray) {
+        if (searchHistoryArray && searchHistoryArray.length !== 0) {
             $searchTipsUl.show();
             $searchInput.css("border-bottom", "none")
             $searchInputDiv.addClass("search-input-div2")
@@ -208,6 +235,7 @@ function showSearchHistory(isSearching, isUndefined) {
                                             <p class="historyItem" value="` + searchHistoryArray[i] + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                         htmlUtil.htmlEncode(searchHistoryArray[i].substr(textValue.length)) + `
+                                                <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
                                             </p>
                                           </li>`);
                 }
@@ -234,14 +262,15 @@ function showSearchHistory(isSearching, isUndefined) {
             for (let i = 0; i < searchArr.length; i++) {
                 if (i >= SHOW_SEARCHING_HISTORY_NUMBER && !isUndefined) {
                     break;
-                }else if (i < SHOW_SEARCH_HISTORY_NUMBER){
+                } else if (i < SHOW_SEARCH_HISTORY_NUMBER) {
                     if (searchArr[i].substr(0, textValue.length) === textValue) {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p class="historyItem" value="` + searchArr[i] + `">
-                                                <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
+                                                <p class="historyItem" value="` + searchArr[i] + `">
+                                                    <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                             htmlUtil.htmlEncode(searchArr[i].substr(textValue.length)) + `
-                                            </p>
-                                          </li>`);
+                                                    <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
+                                                </p>
+                                              </li>`);
                     }
                     searchArray[i] = searchArr[i];
                 }
@@ -312,15 +341,15 @@ function showBingData(data) {
                     var textValue = $searchInput.val().trim().toLowerCase();
                     if (item.substr(0, textValue.length) === textValue) {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p value="` + item + `">
-                                                <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
+                                                <p value="` + item + `">
+                                                    <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                             htmlUtil.htmlEncode(item.substr(textValue.length)) + `
-                                            </p>
-                                          </li>`);
+                                                </p>
+                                              </li>`);
                     } else {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p value="` + htmlUtil.htmlEncode(item) + `">` + htmlUtil.htmlEncode(item) + `</p>
-                                          </li>`);
+                                                <p value="` + htmlUtil.htmlEncode(item) + `">` + htmlUtil.htmlEncode(item) + `</p>
+                                              </li>`);
                     }
                 }
             });
@@ -345,7 +374,7 @@ function onlyShowSearchHistory(searchArray) {
     var $searchTipsUlLi = $(".searchTips-ul li");
     $searchTipsUlLi.remove();
     if (searchArray && searchArray.length !== 0) {
-        if ($searchInput.val().trim()){
+        if ($searchInput.val().trim()) {
             $searchTipsUl.show();
             $searchInput.css("border-bottom", "none")
             $searchInputDiv.addClass("search-input-div2")
@@ -353,18 +382,19 @@ function onlyShowSearchHistory(searchArray) {
                 var textValue = $searchInput.val().trim().toLowerCase();
                 if (element.substr(0, textValue.length) === textValue) {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                        <p class="historyItem" value="` + element + `">
-                                            <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
+                                            <p class="historyItem" value="` + element + `">
+                                                <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                         htmlUtil.htmlEncode(element.substr(textValue.length)) + `
-                                        </p>
-                                      </li>`);
+                                                <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
+                                            </p>
+                                          </li>`);
                 } else {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                        <p value="` + htmlUtil.htmlEncode(element) + `">` + htmlUtil.htmlEncode(element) + `</p>
-                                      </li>`);
+                                            <p value="` + htmlUtil.htmlEncode(element) + `">` + htmlUtil.htmlEncode(element) + `</p>
+                                          </li>`);
                 }
             })
-        }else {
+        } else {
             showSearchHistory(false);
         }
     } else {
