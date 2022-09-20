@@ -253,6 +253,7 @@ function showSearchHistory(isSearching, isUndefined) {
             $searchTipsUlLi.remove();
         }
     } else {
+        $searchTipsUl.css("padding", "10px 0");
         $searchTipsUlLi.remove();
         if (searchHistoryArray) {
             var searchArr = searchHistoryArray.filter(value => {
