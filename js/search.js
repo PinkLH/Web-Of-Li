@@ -47,6 +47,9 @@ $(function () {
     var $searchButton = $(".search-button");
     var $searchInputRemoveIco = $(".search-input-remove-ico");
 
+    //显示选项卡
+    showTabs();
+
     //进入页面就聚焦输入框
     $searchInput.focus();
 
@@ -88,6 +91,26 @@ $(function () {
 })
 
 /**
+ * 显示选项卡
+ */
+function showTabs(){
+    var $tabs = $("#tabs");
+    $tabs.html('');
+    tabsData.forEach(element => {
+        $tabs.append(`  <div class="`+element.class+`">
+                        <a target="_blank" href="`+element.href+`">
+                            <div class="m-item">
+                                <div class="m_imgdiv"><img src="images/`+element.img+`" alt=""></div>
+                                <div class="m_textdiv">
+                                    <h3>`+element.title+`</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>`);
+    });
+}
+
+/**
  * 搜索并保存搜索历史
  */
 function searchAndSaveHistory() {
@@ -99,7 +122,7 @@ function searchAndSaveHistory() {
     }
     var value = encodeURIComponent(textValue);
     if (!value) {
-        alterUtil.message("请输入搜索信息！", "danger");//success, info, warning, danger
+        alterUtil.message("你还没输入东西呢！", "danger");//success, info, warning, danger
     } else {
         if (!searchHistoryArray.includes(textValue)) {
             searchHistoryArray.unshift(textValue);
