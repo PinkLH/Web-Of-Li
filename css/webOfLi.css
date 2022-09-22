@@ -131,6 +131,7 @@ a:hover {
 }
 
 .searchTips-ul li p {
+    position: relative;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -148,8 +149,10 @@ a:hover {
 }
 
 .searchTips-removeSpan {
+    position: absolute;
+    right: 16px;
+    top: 10px;
     font-size: 18px;
-    float: right;
     color: #ccc;
     margin-right: 2px;
     transition: .3s ease-in-out;
