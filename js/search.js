@@ -93,16 +93,16 @@ $(function () {
 /**
  * 显示选项卡
  */
-function showTabs(){
+function showTabs() {
     var $tabs = $("#tabs");
     $tabs.html('');
     tabsData.forEach(element => {
-        $tabs.append(`  <div class="`+element.class+`">
-                        <a target="_blank" href="`+element.href+`">
+        $tabs.append(`  <div class="` + element.class + `">
+                        <a target="_blank" href="` + element.href + `">
                             <div class="m-item">
-                                <div class="m_imgdiv"><img src="images/`+element.img+`" alt=""></div>
+                                <div class="m_imgdiv"><img src="images/` + element.img + `" alt=""></div>
                                 <div class="m_textdiv">
-                                    <h3>`+element.title+`</h3>
+                                    <h3>` + htmlUtil.htmlEncode(element.title) + `</h3>
                                 </div>
                             </div>
                         </a>
