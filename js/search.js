@@ -214,7 +214,7 @@ function removeHistoryItem(event, obj) {
     var $searchInputDiv = $(".search-input-div");
     var $searchTipsUlLi = $(".searchTips-ul li");
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchHistorysOfLi'));
-    var value = $(obj).parent().attr("value");
+    var value = decodeURIComponent($(obj).parent().attr("value"));
     if (searchHistoryArray && searchHistoryArray.includes(value)) {
         $(obj).parent().parent().remove();
         searchHistoryArray.splice(searchHistoryArray.indexOf(value), 1);
@@ -255,7 +255,7 @@ function showSearchHistory(isSearching, isUndefined) {
                 }
                 if (searchHistoryArray[i].substr(0, textValue.length) === textValue) {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p class="historyItem" value="` + searchHistoryArray[i] + `">
+                                            <p class="historyItem" value="` + encodeURIComponent(searchHistoryArray[i]) + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                         htmlUtil.htmlEncode(searchHistoryArray[i].substr(textValue.length)) + `
                                                 <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
@@ -289,7 +289,7 @@ function showSearchHistory(isSearching, isUndefined) {
                 } else if (i < SHOW_SEARCH_HISTORY_NUMBER) {
                     if (searchArr[i].substr(0, textValue.length) === textValue) {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                                <p class="historyItem" value="` + searchArr[i] + `">
+                                                <p class="historyItem" value="` + encodeURIComponent(searchArr[i]) + `">
                                                     <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                             htmlUtil.htmlEncode(searchArr[i].substr(textValue.length)) + `
                                                     <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
@@ -324,7 +324,7 @@ function showBaiduData(data) {
                 var textValue = $searchInput.val().trim().toLowerCase();
                 if (item.substr(0, textValue.length) === textValue) {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p value="` + item + `">
+                                            <p value="` + encodeURIComponent(item) + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                         htmlUtil.htmlEncode(item.substr(textValue.length)) + `
                                             </p>
@@ -365,7 +365,7 @@ function showBingData(data) {
                     var textValue = $searchInput.val().trim().toLowerCase();
                     if (item.substr(0, textValue.length) === textValue) {
                         $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                                <p value="` + item + `">
+                                                <p value="` + encodeURIComponent(item) + `">
                                                     <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                             htmlUtil.htmlEncode(item.substr(textValue.length)) + `
                                                 </p>
@@ -406,7 +406,7 @@ function onlyShowSearchHistory(searchArray) {
                 var textValue = $searchInput.val().trim().toLowerCase();
                 if (element.substr(0, textValue.length) === textValue) {
                     $searchTipsUl.append(`<li onclick="searchItem(this)">
-                                            <p class="historyItem" value="` + element + `">
+                                            <p class="historyItem" value="` + encodeURIComponent(element) + `">
                                                 <span class="searchTips-span">` + htmlUtil.htmlEncode(textValue) + `</span>` +
                         htmlUtil.htmlEncode(element.substr(textValue.length)) + `
                                                 <a onclick="removeHistoryItem(event, this)"><span class="glyphicon glyphicon-remove-sign searchTips-removeSpan"></span></a>
@@ -436,7 +436,7 @@ function searchItem(obj) {
     var $searchInput = $(".search-input");
     var $searchButton = $(".search-button");
     var $searchInputRemoveIco = $(".search-input-remove-ico");
-    $searchInput.val($(obj).find("p").attr("value"));
+    $searchInput.val(decodeURIComponent($(obj).find("p").attr("value")));
     $searchInputRemoveIco.show();
     $searchButton.click();
 }
