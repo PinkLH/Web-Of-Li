@@ -88,6 +88,10 @@ $(function () {
     //点击搜索按钮就搜索并保存搜索历史
     $searchButton.click(searchAndSaveHistory);
 
+    //渲染tabs的title
+    $(".tabsItem").poshytip({
+        className: 'tip-twitter',
+    });
 })
 
 /**
@@ -97,7 +101,7 @@ function showTabs() {
     var $tabs = $("#tabs");
     $tabs.html('');
     tabsData.forEach(element => {
-        $tabs.append(`  <div class="` + element.class + `">
+        $tabs.append(`  <div title="`+htmlUtil.htmlEncode(element.title)+`" class="tabsItem ` + element.class + `">
                         <a target="_blank" href="` + element.href + `">
                             <div class="m-item">
                                 <div class="m_imgdiv"><img src="images/` + element.img + `" alt=""></div>

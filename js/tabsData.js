@@ -138,13 +138,19 @@ var tabsData = [
         "title": "爱奇艺-在线视频网站-海量正版高清视频在线观看"
     },
     {
-        "class": "col-md-6",
+        "class": "col-md-3",
         "href": "https://coding.net/",
         "img": "coding.ico",
         "title": "Coding"
     },
     {
         "class": "col-md-6",
+        "href": "https://www.canva.cn/",
+        "img": "canva.png",
+        "title": "Canva可画"
+    },
+    {
+        "class": "col-md-3",
         "href": "http://tool.liumingye.cn/video/",
         "img": "liumingyeTool.ico",
         "title": "VIP在线视频解析"
