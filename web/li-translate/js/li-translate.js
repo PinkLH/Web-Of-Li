@@ -30,21 +30,9 @@ const baiduLanguageURL = "https://fanyi-api.baidu.com/api/trans/vip/language";
 $(function () {
     var $notTranslated = $("#notTranslated");
     var $translated = $("#translated");
+
     autoTextarea($notTranslated[0], 24);
 
-    // autoTextarea($notTranslated[0], 20)
-    // $.fn.autoHeight = function(){
-    //     function autoHeight(elem){
-    //         elem.style.height = 'auto';
-    //         elem.scrollTop = 0; //防抖动
-    //         elem.style.height = elem.scrollHeight + 'px';
-    //     }
-    //     this.each(function(){
-    //         autoHeight(this);
-    //         $(this).bind('input', autoHeight);
-    //     });
-    // }
-    // $('textarea[autoHeight]').autoHeight();
     $notTranslated.bind('input', function () {
         if ($notTranslated.val().trim() === "") {
             $translated.val("");
@@ -55,59 +43,64 @@ $(function () {
     $("#translateButton").click(function () {
         autoTextarea($translated[0], 24);
         var q = $notTranslated.val().trim();
-        var salt = randomFrom(1, 100000);
-        var sign = md5(APPID + q + salt + KEY);
-        var dataVal = {
-            q: q,
-            salt: salt,
-            from: "auto",
-            to: "zh",
-            appid: APPID,
-            sign: sign
-        }
-
-        $.ajax({
-            url: baiduLanguageURL,
-            data: dataVal,
-            dataType: "jsonp",
-            success: function (data) {
-                console.log(data)
-                if (data.error_code && data.error_code === "54009") {
-                    $.ajax({
-                        url: baiduTranslateURL,
-                        data: dataVal,
-                        dataType: "jsonp",
-                        success: function (data) {
-                            console.log(data);
-                            var value = "";
-                            data.trans_result.forEach(element => {
-                                value = value + element.dst + "\n";
-                            })
-                            $("#translated").val(value);
-                        }
-                    });
-                } else {
-                    dataVal.from = data.data.src;
-                    if (data.data.src === "zh") {
-                        dataVal.to = "en";
-                    }
-                    $.ajax({
-                        url: baiduTranslateURL,
-                        data: dataVal,
-                        dataType: "jsonp",
-                        success: function (data) {
-                            console.log(data);
-                            var value = "";
-                            data.trans_result.forEach(element => {
-                                value = value + element.dst + "\n";
-                            })
-                            $translated.val(value);
-                            autoTextarea($translated[0], 24);
-                        }
-                    });
-                }
+        if (q){
+            var salt = randomFrom(1, 100000);
+            var sign = md5(APPID + q + salt + KEY);
+            var dataVal = {
+                q: q,
+                salt: salt,
+                from: "auto",
+                to: "zh",
+                appid: APPID,
+                sign: sign
             }
-        });
+
+            $.ajax({
+                url: baiduLanguageURL,
+                data: dataVal,
+                dataType: "jsonp",
+                success: function (data) {
+                    console.log(data)
+                    if (data.error_code && data.error_code === "54009") {
+                        $.ajax({
+                            url: baiduTranslateURL,
+                            data: dataVal,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                console.log(data);
+                                var value = "";
+                                data.trans_result.forEach(element => {
+                                    value = value + element.dst + "\n";
+                                })
+                                $translated.val(value);
+                                autoTextarea($translated[0], 24);
+                            }
+                        });
+                    } else {
+                        dataVal.from = data.data.src;
+                        if (data.data.src === "zh") {
+                            dataVal.to = "en";
+                        }
+                        $.ajax({
+                            url: baiduTranslateURL,
+                            data: dataVal,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                console.log(data);
+                                var value = "";
+                                data.trans_result.forEach(element => {
+                                    value = value + element.dst + "\n";
+                                })
+                                $translated.val(value);
+                                autoTextarea($translated[0], 24);
+                            }
+                        });
+                    }
+                }
+            });
+        }else {
+            alterUtil.message("你还没输入东西呢！", "danger");
+        }
     })
 
     $('.photoItems').poshytip({
