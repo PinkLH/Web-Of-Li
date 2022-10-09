@@ -5,7 +5,7 @@
     <title>黎宏的搜索主页</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="images/li.ico" mce_href="images/li.ico" type="image/x-icon" />
+    <link rel="icon" href="images/li.ico" mce_href="images/li.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="poshytio/tip-twitter/tip-twitter.css">
     <link rel="stylesheet" href="css/webOfLi.css">
@@ -20,57 +20,66 @@
 </head>
 
 <body>
-    
-    <div class="container" style="margin-bottom: 100px;">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="m-search">
-                    <div class="input-group input-group-lg search-box">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle search-engin-button"
+
+<div class="container" style="margin-bottom: 100px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-search">
+                <div class="input-group input-group-lg search-box">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle search-engin-button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp;<span
-                                    id="search-engin-text" class="search-engin-text">百度</span>&nbsp;&nbsp;<span
-                                    class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                        onclick="changeSearchEngin(this)"
-                                        searchUrl="https://www.baidu.com/s?wd="
-                                        name="baidu">百度</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                        onclick="changeSearchEngin(this)"
-                                        searchUrl="https://cn.bing.com/search?q="
-                                        name="bing">Bing</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" 
-                                        onclick="changeSearchEngin(this)"
-                                        searchUrl="https://github.com/search?q="
-                                        name="github">GitHub</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="input-group input-group-lg search-input-div">
-                                <input type="text" focus="true" id="search-input" class="form-control search-input" placeholder="Search for...">
-                                <span id="search-input-remove-ico" class="glyphicon glyphicon-remove search-input-remove-ico"></span>
-                        </div>
+                                id="search-engin-text" class="search-engin-text">百度</span>&nbsp;&nbsp;<span
+                                class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="changeSearchEngin(this)"
+                                   searchUrl="https://www.baidu.com/s?wd="
+                                   name="baidu">百度</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="changeSearchEngin(this)"
+                                   searchUrl="https://cn.bing.com/search?q="
+                                   name="bing">Bing</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="changeSearchEngin(this)"
+                                   searchUrl="https://github.com/search?q="
+                                   name="github">GitHub</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="changeSearchEngin(this)"
+                                   searchUrl="https://www.oxfordlearnersdictionaries.com/us/definition/american_english/"
+                                   name="oxford">Oxford</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="input-group input-group-lg search-input-div">
+                        <input type="text" focus="true" id="search-input" class="form-control search-input"
+                               placeholder="Search for...">
+                        <span id="search-input-remove-ico"
+                              class="glyphicon glyphicon-remove search-input-remove-ico"></span>
+                    </div>
 
-                        <ul class="searchTips-ul" name="baidu"></ul>
+                    <ul class="searchTips-ul" name="baidu"></ul>
 
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary search-button" type="button" url="https://www.baidu.com/s?wd="><span
+                    <span class="input-group-btn">
+                            <button class="btn btn-primary search-button" type="button"
+                                    url="https://www.baidu.com/s?wd=" title="点击搜索"><span
                                     class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                         </span>
-                    </div>
                 </div>
             </div>
-
-            <div id="tabs"></div>
-
         </div>
+
+        <div id="tabs"></div>
+
     </div>
+</div>
 
 </body>
 

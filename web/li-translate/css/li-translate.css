@@ -1,0 +1,184 @@
+body {
+    min-width: 740px;
+}
+
+.form-control[readonly] {
+    background-color: #caf8ff;
+}
+
+.m-search {
+    height: auto;
+}
+
+.profilePhoto {
+    position: absolute;
+    right: 25px;
+    top: 10px;
+    z-index: 1000;
+}
+
+.m-item:hover .m_imgdiv {
+    box-shadow: 0 0 5px #a3dadb;
+}
+
+.m_imgdiv {
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 0 5px #a3dadb;
+    border-radius: 10px;
+}
+
+.m_imgdiv:hover {
+    box-shadow: 5px 5px 20px #88b6b7 !important;
+}
+
+.m_imgdiv img {
+    width: 60%;
+    height: 30px;
+    margin: 10px;
+}
+
+.logo-box {
+    width: 22%;
+    min-width: 250px;
+    margin: 25px auto;
+}
+
+.logo {
+    width: 100%;
+}
+
+.m-item {
+    padding: 10px;
+    box-shadow: 0 0 5px #a3dadb;
+    border-radius: 10px;
+    transition: none;
+}
+
+.m-item:hover {
+    box-shadow: 0 0 5px #a3dadb;
+    background-color: #caf8ff;
+}
+
+.change-lang-box {
+    height: 60px;
+}
+
+.textareaLabel {
+    width: 100%;
+}
+
+.lh-textarea {
+    font-size: 20px;
+    padding: 10px 15px;
+    resize: none;
+    background-color: #caf8ff;
+    text-align: left;
+    font-family: "Microsoft YaHei", serif;
+    font-weight: initial;
+    /*transition: .3s ease-in-out;*/
+}
+
+.lh-textarea::placeholder {
+    color: rgba(153, 153, 153, 0.5);
+}
+
+.form-control {
+    border: none;
+}
+
+.form-control:focus {
+    border: none;
+    box-shadow: 0 0 5px #a3dadb;
+}
+
+.change-lang-box > div:not(:last-child) {
+    float: left;
+    padding-top: 3px;
+    width: 15.2%;
+    margin: auto 1%;
+}
+
+.translateButton,
+.transfer,
+.fromT,
+.toT {
+    width: 100%;
+    padding: 0 0;
+    font-weight: bold;
+    height: 34px;
+    transition: .3s ease-in-out;
+}
+
+.translateButton,
+.fromT,
+.toT {
+    box-shadow: 3px 3px 5px #a3dadb;
+}
+
+.translateButton:hover,
+.fromT:hover,
+.toT:hover {
+    box-shadow: 5px 5px 20px #88b6b7
+}
+
+.transfer-box {
+    width: 5% !important;
+}
+
+.transfer {
+    width: 20px;
+    color: black;
+    font-size: 20px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.transfer span {
+    vertical-align: middle;
+}
+
+.fromT,
+.toT {
+    background-color: #00b2ff;
+    border: none;
+}
+
+.fromT:hover,
+.toT:hover {
+    background-color: #0089c4;
+    border: none;
+}
+
+.fromT:focus,
+.toT:focus {
+    background-color: #7dc3ff !important;
+    border: none;
+}
+
+.langUl {
+    width: 100%;
+}
+
+.langUl > li > a {
+    padding: 3px 0;
+    text-align: center;
+}
+
+.otherT-box {
+    position: absolute;
+    display: flex;
+    right: 70px;
+    width: 25% !important;
+    height: 85px;
+    top: 7px;
+    justify-content: center;
+    overflow: hidden;
+    /*margin-right: 0 !important;*/
+}
+
+.otherT-box > div {
+    display: inline-block;
+    float: left;
+    padding: 0 5px;
+}

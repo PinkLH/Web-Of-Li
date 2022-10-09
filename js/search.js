@@ -15,6 +15,12 @@ const baiduTipsUrl = "https://www.baidu.com/sugrec?prod=pc";
  */
 const bingTipsUrl = "https://api.bing.com/qsonhs.aspx?type=cb";
 
+// /**
+//  * 牛津学习词典搜索提示接口，有跨域问题暂时还没解决，先不用它
+//  * @type {string}
+//  */
+// const oxfordTipsUrl = "https://www.oxfordlearnersdictionaries.com/us/autocomplete/american_english/";
+
 /**
  * 保存的搜索历史的数量，超过这个数量的将被自动删除
  * @type {number}
@@ -88,9 +94,11 @@ $(function () {
     //点击搜索按钮就搜索并保存搜索历史
     $searchButton.click(searchAndSaveHistory);
 
-    //渲染tabs的title
-    $(".tabsItem").poshytip({
+    //渲染搜索按钮的title
+    $searchButton.poshytip({
         className: 'tip-twitter',
+        offsetY: -48,
+        offsetX: 10
     });
 })
 
@@ -101,8 +109,8 @@ function showTabs() {
     var $tabs = $("#tabs");
     $tabs.html('');
     tabsData.forEach(element => {
-        $tabs.append(`  <div title="`+htmlUtil.htmlEncode(element.title)+`" class="tabsItem ` + element.class + `">
-                        <a target="_blank" href="` + element.href + `">
+        $tabs.append(`  <div class="` + element.class + `">
+                        <a target="` + element.target + `" href="` + element.href + `">
                             <div class="m-item">
                                 <div class="m_imgdiv"><img src="images/` + element.img + `" alt=""></div>
                                 <div class="m_textdiv">
@@ -138,7 +146,7 @@ function searchAndSaveHistory() {
             searchHistoryArray.pop();
         }
         localStorage.setItem('searchHistorysOfLi', JSON.stringify(searchHistoryArray))
-        window.open($(this).attr("url") + encodeURIComponent($searchInput.val().trim()));
+        window.open($(this).attr("url") + value);
     }
 }
 
@@ -181,6 +189,21 @@ function showSearchContent() {
             case "github":
                 onlyShowSearchHistory(showSearchHistory(true, true));
                 break;
+
+            case "oxford":
+                onlyShowSearchHistory(showSearchHistory(true, true));
+                break;
+
+            //有跨域问题，暂时还没解决，先不用
+            // case "oxford":
+            //     $.ajax({
+            //         url: oxfordTipsUrl,
+            //         // jsonp: "cb",
+            //         data: {q: value},
+            //         dataType: 'jsonp',
+            //         success: data => showOxfordData(data)
+            //     });
+            //     break;
         }
     } else {
         showSearchHistory(false);
@@ -391,6 +414,14 @@ function showBingData(data) {
     }
 }
 
+// /**
+//  * 显示牛津学习词典接口返回的搜索提示，有跨域问题，先不用
+//  * @param data 返回的搜索提示数据
+//  */
+// function showOxfordData(data){
+//     console.log(data);
+// }
+
 /**
  * 只显示搜索历史
  * @param searchArray 搜索中的匹配到的最近几条历史
@@ -471,6 +502,12 @@ function changeSearchEngin(obj) {
 
         case "github":
             $searchEnginText.html("GitHub");
+            $searchTipsUl.attr("name", name);
+            $searchButton.attr("url", searchUrl);
+            break;
+
+        case "oxford":
+            $searchEnginText.html("Oxford");
             $searchTipsUl.attr("name", name);
             $searchButton.attr("url", searchUrl);
             break;
