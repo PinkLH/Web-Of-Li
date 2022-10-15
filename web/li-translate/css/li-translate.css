@@ -69,11 +69,12 @@ body {
 }
 
 .lh-textarea {
-    font-size: 20px;
+    font-size: 16px;
+    /*font-size: 20px;*/
     padding: 10px 15px;
     resize: none;
     background-color: #caf8ff;
-    text-align: left;
+    text-align: justify;
     font-family: "Microsoft YaHei", serif;
     font-weight: initial;
     /*transition: .3s ease-in-out;*/
@@ -101,8 +102,7 @@ body {
 
 .translateButton,
 .transfer,
-.fromT,
-.toT {
+.dropdown-toggle {
     width: 100%;
     padding: 0 0;
     font-weight: bold;
@@ -111,14 +111,12 @@ body {
 }
 
 .translateButton,
-.fromT,
-.toT {
+.dropdown-toggle {
     box-shadow: 3px 3px 5px #a3dadb;
 }
 
 .translateButton:hover,
-.fromT:hover,
-.toT:hover {
+.dropdown-toggle:hover {
     box-shadow: 5px 5px 20px #88b6b7
 }
 
@@ -128,7 +126,7 @@ body {
 
 .transfer {
     width: 20px;
-    color: black;
+    color: #c1c1c1;
     font-size: 20px;
     margin: 0 auto;
     cursor: pointer;
@@ -138,31 +136,69 @@ body {
     vertical-align: middle;
 }
 
-.fromT,
-.toT {
+.langText {
+    display: block;
+    width: 70%;
+    padding-left: 10px;
+    float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dropdown-toggle {
     background-color: #00b2ff;
     border: none;
 }
 
-.fromT:hover,
-.toT:hover {
+.dropdown-toggle:hover {
     background-color: #0089c4;
     border: none;
 }
 
-.fromT:focus,
-.toT:focus {
+.dropdown-toggle:focus {
     background-color: #7dc3ff !important;
     border: none;
+}
+.caret{
+    transition: .3s ease-in-out;
+    transform: rotate(0deg) scale(150%);
+}
+.dropdown-toggle:focus>.caret{
+    transform: rotate(180deg) scale(150%);
 }
 
 .langUl {
     width: 100%;
+    min-width: 100px;
+    max-height: 400px;
+    overflow: auto;
+    background: #fff;
+}
+
+.langUl::-webkit-scrollbar {
+    width: 5px;
+    /*width: 9px;*/
+}
+
+.langUl::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgb(236, 236, 236);
+    background: rgba(236, 236, 236);
+    /*border: 2px solid #fff;*/
+}
+.langUl::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px #fff;
+    border-radius: 0 4px 4px 0;
+    background: #fff;
+}
+.langUl::-webkit-scrollbar-thumb:hover{
+    background-color: #bbbbbb;
 }
 
 .langUl > li > a {
-    padding: 3px 0;
-    text-align: center;
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .otherT-box {

@@ -16,6 +16,7 @@
     <script src="../../poshytio/jquery.poshytip.min.js"></script>
     <script src="js/md5.min.js"></script>
     <script src="../../js/alertUtil.js"></script>
+    <script src="js/langData.js"></script>
     <script src="js/li-translate.js"></script>
 </head>
 <body>
@@ -33,36 +34,34 @@
             <div class="m-item change-lang-box">
                 <div class="fromT-box">
                     <div class="btn-group" style="width: 100%;">
-                        <button type="button" class="btn btn-primary dropdown-toggle fromT" style="width: 100%;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            自动检测&nbsp;<span id="autoLang"></span><span class="caret"></span>
+                        <button title="自动检测" langCode="auto" langName="自动检测" type="button"
+                                class="btn btn-primary dropdown-toggle fromT" style="width: 100%;"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="langText">自动检测</span><span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu langUl" id="fromUl">
-                            <li><a href="javascript:void(0);">1</a></li>
-                            <li><a href="javascript:void(0);">2</a></li>
-                            <li><a href="javascript:void(0);">3</a></li>
+                            <li><a href="javascript:void(0);" onclick="changeLang(this)" langCode="auto" langName="自动检测" title="英语">自动检测</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="transfer-box">
-                    <div id="transfer" class="transfer">
+                    <div title="无法交换" id="transfer" onclick="void(0)" class="transfer">
                         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
                     </div>
                 </div>
                 <div class="toT-box">
                     <div class="btn-group" style="width: 100%;">
-                        <button type="button" class="btn btn-primary dropdown-toggle toT" style="width: 100%;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            中&nbsp;文&nbsp;<span class="caret"></span>
+                        <button title="中文(简体)" langCode="zh" langName="中文(简体)" type="button"
+                                class="btn btn-primary dropdown-toggle toT" style="width: 100%;" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            <span class="langText">中文(简体)</span><span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu langUl" id="toUl">
-                            <li><a href="javascript:void(0);">1</a></li>
-                            <li><a href="javascript:void(0);">2</a></li>
-                            <li><a href="javascript:void(0);">3</a></li>
-                        </ul>
+                        <ul class="dropdown-menu langUl" id="toUl"></ul>
                     </div>
                 </div>
                 <div class="translateButton-box">
-                    <button id="translateButton" class="btn btn-primary translateButton" type="button" >
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;翻&nbsp;译
+                    <button id="translateButton" class="btn btn-primary translateButton" type="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;翻&nbsp;译
                     </button>
                 </div>
                 <div class="otherT-box">
@@ -91,12 +90,14 @@
         </div>
         <div class="col-xs-6">
             <label class="textareaLabel">
-                <textarea id="notTranslated" style="height: 300px;" class="m-item form-control lh-textarea" placeholder="请输入要翻译的文本"></textarea>
+                <textarea id="notTranslated" style="height: 300px;" class="m-item form-control lh-textarea"
+                          placeholder="请输入要翻译的文本"></textarea>
             </label>
         </div>
         <div class="col-xs-6">
             <label class="textareaLabel">
-                <textarea id="translated" style="height: 300px; transition: .3s ease-in-out;" class="m-item form-control lh-textarea" readonly></textarea>
+                <textarea id="translated" style="height: 300px; transition: .3s ease-in-out;"
+                          class="m-item form-control lh-textarea" readonly></textarea>
             </label>
         </div>
     </div>

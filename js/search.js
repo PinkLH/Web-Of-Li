@@ -487,29 +487,7 @@ function changeSearchEngin(obj) {
     var $obj = $(obj)
     var name = $obj.attr("name");
     var searchUrl = $obj.attr("searchUrl");
-    switch (name) {
-        case "baidu":
-            $searchEnginText.html("百度");
-            $searchTipsUl.attr("name", name);
-            $searchButton.attr("url", searchUrl);
-            break;
-
-        case "bing":
-            $searchEnginText.html("Bing");
-            $searchTipsUl.attr("name", name);
-            $searchButton.attr("url", searchUrl);
-            break;
-
-        case "github":
-            $searchEnginText.html("GitHub");
-            $searchTipsUl.attr("name", name);
-            $searchButton.attr("url", searchUrl);
-            break;
-
-        case "oxford":
-            $searchEnginText.html("Oxford");
-            $searchTipsUl.attr("name", name);
-            $searchButton.attr("url", searchUrl);
-            break;
-    }
+    $searchEnginText.html($obj.html());
+    $searchTipsUl.attr("name", name);
+    $searchButton.attr("url", searchUrl);
 }
