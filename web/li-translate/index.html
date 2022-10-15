@@ -88,17 +88,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-6" style="position: relative">
             <label class="textareaLabel">
                 <textarea id="notTranslated" style="height: 300px;" class="m-item form-control lh-textarea"
                           placeholder="请输入要翻译的文本"></textarea>
             </label>
+            <div class="textareaInfo textareaInfoFrom" style="position: absolute"><span class="word">0</span>字符；<span class="line">1</span>行</div>
         </div>
         <div class="col-xs-6">
-            <label class="textareaLabel">
+            <label class="textareaLabel" style="position: relative">
                 <textarea id="translated" style="height: 300px; transition: .3s ease-in-out;"
                           class="m-item form-control lh-textarea" readonly></textarea>
             </label>
+            <div class="textareaInfo textareaInfoTo" style="position: absolute"><span class="word">0</span>字符；<span class="line">1</span>行</div>
         </div>
     </div>
 </div>

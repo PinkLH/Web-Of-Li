@@ -25,26 +25,32 @@ const baiduTranslateURL = "https://fanyi-api.baidu.com/api/trans/vip/translate";
  * 百度语言识别接口地址，暂时没有用到
  * @type {string}
  */
-// const baiduLanguageURL = "https://fanyi-api.baidu.com/api/trans/vip/language";
+const baiduLanguageURL = "https://fanyi-api.baidu.com/api/trans/vip/language";
 
 $(function () {
     var $notTranslated = $("#notTranslated");
     var $translated = $("#translated");
+    var $textareaInfoFrom = $(".textareaInfoFrom");
+    var $textareaInfoTo = $(".textareaInfoTo");
 
     showLang();
 
     $notTranslated.focus();
 
-    autoTextarea($notTranslated[0], 24);
+    autoTextarea($notTranslated[0], 35);
 
     $notTranslated.bind('input', function () {
         if ($notTranslated.val().trim() === "") {
             $translated.val("");
             $translated.css("height", 300);
         }
-
+        $textareaInfoFrom.find(".line").html($(this).val().split("\n").length)
+        $textareaInfoFrom.find(".word").html($(this).val().length);
     });
-
+    $translated.change(function (){
+        $textareaInfoTo.find(".line").html($(this).val().split("\n").length)
+        $textareaInfoTo.find(".word").html($(this).val().length);
+    })
     $("#translateButton").click(translate)
 
     $('.photoItems').poshytip({
@@ -75,26 +81,74 @@ $(function () {
 })
 
 /**
- * 翻译
+ * 请求翻译
+ * @param q 翻译内容
+ * @param salt 随机数
+ * @param sign 签名
  */
-function translate() {
-    var $notTranslated = $("#notTranslated");
+function requestTranslate(q, salt, sign){
+    var $dropdownToggle = $('.dropdown-toggle');
     var $translated = $("#translated");
-    autoTextarea($translated[0], 24);
-    var q = $notTranslated.val().trim();
-    if (q) {
-        var salt = randomFrom(1, 100000);
-        var sign = md5(APPID + q + salt + KEY);
-        var from = $(".fromT").attr("langCode")
-        var to = $(".toT").attr("langCode")
-        var dataVal = {
-            q: q,
-            salt: salt,
-            from: from,
-            to: to,
-            appid: APPID,
-            sign: sign
-        }
+    var $fromT = $(".fromT");
+    var $toT = $(".toT");
+    var from = $fromT.attr("langCode")
+    var to = $toT.attr("langCode")
+    var dataVal = {
+        q: q,
+        salt: salt,
+        from: from,
+        to: to,
+        appid: APPID,
+        sign: sign
+    }
+
+    if (dataVal.from === "auto"){
+        $.ajax({
+            url: baiduTranslateURL,
+            data: dataVal,
+            dataType: "jsonp",
+            success: function (data) {
+                console.log(data);
+                let i;
+                for (i = 0; i < langData.length; i++) {
+                    if (langData[i].code === data.from) {
+                        $fromT.attr("title", langData[i].name);
+                        $(".fromT>.langText").html("检测到“" + langData[i].name + "”");
+                        $dropdownToggle.poshytip('destroy');
+                        $dropdownToggle.poshytip({
+                            className: 'tip-twitter',
+                            showTimeout: 500,
+                            offsetY: -48,
+                            offsetX: 10
+                        });
+                        break;
+                    }
+                }
+                if (langData[i] === undefined){
+                    $fromT.attr("title", "其他语言");
+                    $(".fromT>.langText").html("检测到“其他语言”");
+                    $dropdownToggle.poshytip('destroy');
+                    $dropdownToggle.poshytip({
+                        className: 'tip-twitter',
+                        showTimeout: 500,
+                        offsetY: -48,
+                        offsetX: 10
+                    });
+                }
+                var value = "";
+                for (let i = 0; i < data.trans_result.length; i++) {
+                    if (i === data.trans_result.length - 1){
+                        value = value + data.trans_result[i].dst;
+                    }else{
+                        value = value + data.trans_result[i].dst + "\n";
+                    }
+                }
+                $translated.val(value);
+                $translated.change();
+                autoTextarea($translated[0], 35);
+            }
+        });
+    }else{
         $.ajax({
             url: baiduTranslateURL,
             data: dataVal,
@@ -110,60 +164,52 @@ function translate() {
                     }
                 }
                 $translated.val(value);
-                autoTextarea($translated[0], 24);
+                $translated.change();
+                autoTextarea($translated[0], 35);
             }
         });
-        // $.ajax({
-        //     url: baiduLanguageURL,
-        //     data: dataVal,
-        //     dataType: "jsonp",
-        //     success: function (data) {
-        //         console.log(data)
-        //         if (data.error_code && data.error_code === "54009") {
-        //             $.ajax({
-        //                 url: baiduTranslateURL,
-        //                 data: dataVal,
-        //                 dataType: "jsonp",
-        //                 success: function (data) {
-        //                     console.log(data);
-        //                     var value = "";
-        //                     for (let i = 0; i < data.trans_result.length; i++) {
-        //                         if (i === data.trans_result.length - 1){
-        //                             value = value + data.trans_result[i].dst;
-        //                         }else{
-        //                             value = value + data.trans_result[i].dst + "\n";
-        //                         }
-        //                     }
-        //                     $translated.val(value);
-        //                     autoTextarea($translated[0], 24);
-        //                 }
-        //             });
-        //         } else {
-        //             dataVal.from = data.data.src;
-        //             if (data.data.src === "zh") {
-        //                 dataVal.to = "en";
-        //             }
-        //             $.ajax({
-        //                 url: baiduTranslateURL,
-        //                 data: dataVal,
-        //                 dataType: "jsonp",
-        //                 success: function (data) {
-        //                     console.log(data);
-        //                     var value = "";
-        //                     for (let i = 0; i < data.trans_result.length; i++) {
-        //                         if (i === data.trans_result.length - 1){
-        //                             value = value + data.trans_result[i].dst;
-        //                         }else{
-        //                             value = value + data.trans_result[i].dst + "\n";
-        //                         }
-        //                     }
-        //                     $translated.val(value);
-        //                     autoTextarea($translated[0], 24);
-        //                 }
-        //             });
-        //         }
-        //     }
-        // });
+    }
+}
+
+/**
+ * 翻译
+ */
+function translate() {
+    var $notTranslated = $("#notTranslated");
+    var $translated = $("#translated");
+    var $toT = $(".toT");
+    autoTextarea($translated[0], 35);
+    $translated.css("height", "300px");
+    var q = $notTranslated.val().trim();
+    if (q) {
+        var salt = randomFrom(1, 100000);
+        var sign = md5(APPID + q + salt + KEY);
+
+        $.ajax({
+            url: baiduLanguageURL,
+            data: {
+                q: q,
+                salt: salt,
+                appid: APPID,
+                sign: sign
+            },
+            dataType: "jsonp",
+            success: function (data){
+                if (data.error_code && data.error_code === "54009") {
+                    requestTranslate(q, salt, sign);
+                }else {
+                    if (data.data.src === $toT.attr("langCode")) {
+                        $("#toUl").find("#lang-en").click();
+                    }
+                    if (data.data.src === "en" && $toT.attr("langCode") === "en") {
+                        $("#toUl").find("#lang-zh").click();
+                    }
+                    requestTranslate(q, salt, sign);
+                }
+            }
+        });
+
+
     } else {
         alterUtil.message("你还没输入东西呢！", "danger");
     }
@@ -176,7 +222,7 @@ function showLang(){
     langData.forEach(element => {
         $(".langUl").append(`
             <li>
-                <a href="javascript:void(0);" onclick="changeLang(this)" 
+                <a href="javascript:void(0);" onclick="changeLang(this)" id="lang-`+element.code+`"
                 langCode="`+element.code+`" langName="`+element.name+`" title="`+element.name+`">`+element.name+`</a>
             </li>
         `);

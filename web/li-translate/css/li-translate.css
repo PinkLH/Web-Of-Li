@@ -218,3 +218,8 @@ body {
     float: left;
     padding: 0 5px;
 }
+
+.textareaInfo{
+    right: 25px;
+    bottom: 25px;
+}
