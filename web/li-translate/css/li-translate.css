@@ -223,3 +223,9 @@ body {
     right: 25px;
     bottom: 25px;
 }
+
+.word,
+.line{
+    font-weight: bold;
+    padding: 0 3px;
+}

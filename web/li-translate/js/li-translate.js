@@ -22,37 +22,49 @@ const KEY = "_Nzdk52lhoveAzS_uAZb";
 const baiduTranslateURL = "https://fanyi-api.baidu.com/api/trans/vip/translate";
 
 /**
- * 百度语言识别接口地址
+ * 百度语种识别接口地址
  * @type {string}
  */
 const baiduLanguageURL = "https://fanyi-api.baidu.com/api/trans/vip/language";
 
 $(function () {
+    //一些选择器
     var $notTranslated = $("#notTranslated");
     var $translated = $("#translated");
     var $textareaInfoFrom = $(".textareaInfoFrom");
     var $textareaInfoTo = $(".textareaInfoTo");
 
+    //展示语言
     showLang();
 
+    //进入页面就聚集
     $notTranslated.focus();
 
+    //文字域的高度自适应
     autoTextarea($notTranslated[0], 35);
 
+    //输入翻译内容时触发的函数
     $notTranslated.bind('input', function () {
+        //没有内容时，清空翻译框的内容
         if ($notTranslated.val().trim() === "") {
             $translated.val("");
             $translated.css("height", 300);
         }
+        //更新字符数和行数的信息
         $textareaInfoFrom.find(".line").html($(this).val().split("\n").length)
         $textareaInfoFrom.find(".word").html($(this).val().length);
     });
+
+    //翻译框改变时更新字符数和行数的信息
     $translated.change(function (){
         $textareaInfoTo.find(".line").html($(this).val().split("\n").length)
         $textareaInfoTo.find(".word").html($(this).val().length);
     })
+
+    //点击翻译按钮时开始翻译
     $("#translateButton").click(translate)
 
+    //加入一些美化的title
     $('.photoItems').poshytip({
         className: 'tip-twitter',
         showTimeout: 500,
@@ -101,7 +113,6 @@ function requestTranslate(q, salt, sign){
         appid: APPID,
         sign: sign
     }
-
     if (dataVal.from === "auto"){
         $.ajax({
             url: baiduTranslateURL,
@@ -210,8 +221,6 @@ function translate() {
                 }
             }
         });
-
-
     } else {
         alterUtil.message("你还没输入东西呢！", "danger");
     }
