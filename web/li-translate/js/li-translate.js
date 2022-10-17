@@ -22,7 +22,7 @@ const KEY = "_Nzdk52lhoveAzS_uAZb";
 const baiduTranslateURL = "https://fanyi-api.baidu.com/api/trans/vip/translate";
 
 /**
- * 百度语言识别接口地址，暂时没有用到
+ * 百度语言识别接口地址
  * @type {string}
  */
 const baiduLanguageURL = "https://fanyi-api.baidu.com/api/trans/vip/language";
@@ -177,6 +177,7 @@ function requestTranslate(q, salt, sign){
 function translate() {
     var $notTranslated = $("#notTranslated");
     var $translated = $("#translated");
+    var $fromT = $(".fromT");
     var $toT = $(".toT");
     autoTextarea($translated[0], 35);
     $translated.css("height", "300px");
@@ -184,7 +185,8 @@ function translate() {
     if (q) {
         var salt = randomFrom(1, 100000);
         var sign = md5(APPID + q + salt + KEY);
-
+        var from = $fromT.attr("langCode")
+        var to = $toT.attr("langCode")
         $.ajax({
             url: baiduLanguageURL,
             data: {
@@ -198,10 +200,10 @@ function translate() {
                 if (data.error_code && data.error_code === "54009") {
                     requestTranslate(q, salt, sign);
                 }else {
-                    if (data.data.src === $toT.attr("langCode")) {
+                    if ((data.data.src === to && from === "auto") || from === to) {
                         $("#toUl").find("#lang-en").click();
                     }
-                    if (data.data.src === "en" && $toT.attr("langCode") === "en") {
+                    if ((data.data.src === "en" && to === "en" && from === "auto") || (from ="en" && to === "en")) {
                         $("#toUl").find("#lang-zh").click();
                     }
                     requestTranslate(q, salt, sign);
