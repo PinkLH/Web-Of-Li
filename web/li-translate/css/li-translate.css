@@ -120,6 +120,11 @@ body {
     box-shadow: 5px 5px 20px #88b6b7
 }
 
+.translateButton-box{
+    margin: 0 1% 0 10% !important;
+    width: 13% !important;
+}
+
 .transfer-box {
     width: 5% !important;
 }
